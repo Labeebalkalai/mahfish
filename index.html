@@ -6,6 +6,9 @@
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="أمواج الصياد">
+    <meta name="apple-mobile-web-app-title" content="أمواج الصياد">
     <title>أمواج الصياد - إدارة المخزون الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css?v=3">
@@ -102,13 +105,11 @@
 
     <!-- Header for Printing (Hidden by default) -->
     <div class="print-only-header" style="display: none; width: 100%; border-bottom: 3px double #333; margin-bottom: 2rem; padding-bottom: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="text-align: right;">
-                <h1 style="color: #1e293b; font-size: 1.8rem; margin: 0;">مؤسسة أمواج الصياد</h1>
-                <p style="color: #64748b; margin: 0.2rem 0;">لتجارة وتخزين الأسماك</p>
-                <p style="font-size: 0.8rem; color: #94a3b8;">تاريخ التقرير: <span class="print-date"></span></p>
-            </div>
-            <img src="logo.jpeg" style="width: 100px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <img src="logo.jpeg" style="width: 120px; border-radius: 15px; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <h1 style="color: #1e293b; font-size: 2.2rem; margin: 0;">مؤسسة أمواج الصياد</h1>
+            <p style="color: #64748b; margin: 0.2rem 0; font-size: 1.2rem; font-weight: 600;">لتجارة وتخزين الأسماك</p>
+            <p style="font-size: 1rem; color: #475569; margin-top: 0.5rem;">تاريخ التقرير: <span class="print-date"></span></p>
         </div>
     </div>
 
@@ -487,6 +488,13 @@
                         </div>
                     </div>
 
+                    <!-- App Installation (Android) -->
+                    <div id="install-card" class="card" style="display: none; background: rgba(59, 130, 246, 0.05); padding: 1.5rem; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <label style="display: block; margin-bottom: 1rem; color: var(--primary-color);"><i class="fas fa-mobile-alt"></i> نسخة الأندرويد</label>
+                        <button id="install-app-btn" class="btn-primary" style="width: 100%; margin-top: 0;">تثبيت التطبيق على الشاشة الرئيسية</button>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">قم بتثبيت التطبيق للوصول السريع بدون متصفح.</p>
+                    </div>
+
                     <!-- System Reset -->
                     <div class="card" style="background: rgba(239, 68, 68, 0.05); padding: 1.5rem; border: 1px solid rgba(239, 68, 68, 0.2);">
                         <label style="display: block; margin-bottom: 1rem; color: #ef4444;"><i class="fas fa-radiation"></i> منطقة الخطر</label>
@@ -504,9 +512,10 @@
         </section>
     </main>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <!-- Firebase SDK (v8 for stable compatibility) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-nav">
@@ -532,7 +541,7 @@
         </a>
     </nav>
 
-    <script src="js/main.js?v=2"></script>
+    <script src="js/main.js?v=3"></script>
     <script>
         // Force unregister stuck service workers and hard reload if needed
         if ('serviceWorker' in navigator) {

@@ -18,16 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const thresholdInput = document.getElementById('threshold-input');
     if (thresholdInput) thresholdInput.value = lowStockThreshold;
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAFlBpJY53TwsqvFsfgfoLeTTjzKDGB5Ms",
-        authDomain: "amwaaa-c514a.firebaseapp.com",
-        databaseURL: "https://amwaaa-c514a-default-rtdb.firebaseio.com",
-        projectId: "amwaaa-c514a",
-        storageBucket: "amwaaa-c514a.firebasestorage.app",
-        messagingSenderId: "395157441882",
-        appId: "1:395157441882:web:41d226cbbb2059439a7763",
-        measurementId: "G-5HZEGLQXJW"
-    };
 
     // --- Navigation Logic (Desktop & Mobile Sync) ---
     const allLinks = [...navLinks, ...document.querySelectorAll('.mobile-nav-link')];
@@ -537,59 +527,115 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Firebase Logic (Improved for Debugging) ---
+    // --- Firebase Global Configuration & Sync Logic ---
+    const config = {
+        apiKey: "AIzaSyAFlBpJY53TwsqvFsfgfoLeTTjzKDGB5Ms",
+        authDomain: "amwaaa-c514a.firebaseapp.com",
+        databaseURL: "https://amwaaa-c514a-default-rtdb.firebaseio.com",
+        projectId: "amwaaa-c514a",
+        storageBucket: "amwaaa-c514a.firebasestorage.app",
+        messagingSenderId: "395157441882",
+        appId: "1:395157441882:web:41d226cbbb2059439a7763"
+    };
+
     const statusDot = document.getElementById('firebase-status');
+
     if (typeof firebase !== 'undefined') {
         try {
-            firebase.initializeApp(firebaseConfig);
+            firebase.initializeApp(config);
             const db = firebase.database();
             
-            // Check connection status
+            // Sign in anonymously to ensure session (optional but helps stability)
+            firebase.auth().signInAnonymously().catch(e => console.error("Auth error:", e));
+
+            // Connection Monitor
             db.ref(".info/connected").on("value", (snap) => {
-                if (snap.val() === true) {
-                    if (statusDot) {
-                        statusDot.style.background = '#10b981';
-                        statusDot.title = "متصل بالسحابة";
-                    }
-                    console.log("Connected to Firebase");
-                } else {
-                    if (statusDot) {
-                        statusDot.style.background = '#f59e0b';
-                        statusDot.title = "جاري الاتصال...";
-                    }
+                const isConnected = snap.val() === true;
+                if (statusDot) {
+                    statusDot.style.background = isConnected ? '#10b981' : '#f59e0b';
+                    statusDot.title = isConnected ? "متصل بالسحابة" : "جاري الاتصال...";
                 }
             });
 
-            const sync = (path, localKey, renderFn) => {
-                db.ref(path).on('value', (s) => {
-                    const cloudData = s.val();
-                    if (cloudData) {
-                        const items = Array.isArray(cloudData) ? cloudData : Object.values(cloudData);
-                        localStorage.setItem(localKey, JSON.stringify(items));
-                        if (renderFn) renderFn();
-                    } else {
+            // Master Sync Function
+            const startSync = (path, localKey, renderFn) => {
+                const ref = db.ref(path);
+                
+                // 1. Initial Data check
+                ref.once('value').then(snap => {
+                    if (!snap.exists()) {
+                        // Firebase is empty, upload local storage
                         const localData = localStorage.getItem(localKey);
                         if (localData && JSON.parse(localData).length > 0) {
-                            db.ref(path).set(JSON.parse(localData)).catch(e => console.error("Sync error:", e));
+                            console.log(`Seeding ${path} to Firebase...`);
+                            ref.set(JSON.parse(localData));
                         }
                     }
+                });
+
+                // 2. Real-time Listening
+                ref.on('value', (snap) => {
+                    if (snap.exists()) {
+                        const data = snap.val();
+                        const items = Array.isArray(data) ? data : Object.values(data);
+                        localStorage.setItem(localKey, JSON.stringify(items));
+                        if (renderFn) renderFn();
+                    }
                 }, (err) => {
-                    console.error("Permission denied or error:", err);
+                    console.error(`Firebase Error (${path}):`, err);
                     if (statusDot) statusDot.style.background = '#ef4444';
                 });
             };
 
-            sync('fiber_fridge_items', 'fiber_fridge_items', () => renderFridgeTable('fiber'));
-            sync('shop_fridge_items', 'shop_fridge_items', () => renderFridgeTable('shop'));
-            sync('transaction_logs', 'transaction_logs', renderLogs);
+            // Start all syncs
+            startSync('fiber_fridge_items', 'fiber_fridge_items', () => renderFridgeTable('fiber'));
+            sync_shop = startSync('shop_fridge_items', 'shop_fridge_items', () => renderFridgeTable('shop'));
+            sync_logs = startSync('transaction_logs', 'transaction_logs', renderLogs);
 
         } catch (err) {
-            console.error("Firebase init error:", err);
+            console.error("Firebase Setup Error:", err);
             if (statusDot) statusDot.style.background = '#ef4444';
         }
     } else {
-        if (statusDot) statusDot.style.background = '#334155';
+        console.warn("Firebase scripts not loaded.");
     }
+
+    // --- PWA Installation Logic ---
+    let deferredPrompt;
+    const installCard = document.getElementById('install-card');
+    const installBtn = document.getElementById('install-app-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI notify the user they can add to home screen
+        if (installCard) installCard.style.display = 'block';
+    });
+
+    if (installBtn) {
+        installBtn.addEventListener('click', (e) => {
+            if (!deferredPrompt) return;
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+                if (installCard) installCard.style.display = 'none';
+            });
+        });
+    }
+
+    window.addEventListener('appinstalled', (evt) => {
+        console.log('App was installed');
+        if (installCard) installCard.style.display = 'none';
+    });
 
     // Initial load
     renderFridgeTable('fiber'); renderFridgeTable('shop'); renderLogs(); ensureOneRow();
