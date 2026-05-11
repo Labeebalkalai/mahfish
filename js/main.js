@@ -423,37 +423,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fT = document.getElementById('filter-type'), fF = document.getElementById('filter-fridge'), cL = document.getElementById('clear-logs-btn'), pL = document.getElementById('print-logs-btn');
     if (fT) fT.addEventListener('change', renderLogs); if (fF) fF.addEventListener('change', renderLogs);
-    if (pL) pL.addEventListener('click', () => {
-        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
-        window.print();
-    });
-    const pFiber = document.getElementById('print-fiber-btn'), pShop = document.getElementById('print-shop-btn');
-    if (pFiber) pFiber.addEventListener('click', () => {
-        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
-        window.print();
-    });
-    if (pShop) pShop.addEventListener('click', () => {
-        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
-        window.print();
-    });
 
-    // Export CSV
+    // Improved Print Function for Android/Mobile
+    const triggerPrint = () => {
+        try {
+            document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
+            
+            // Give UI time to update date fields
+            setTimeout(() => {
+                if (window.print) {
+                    window.print();
+                } else if (document.execCommand) {
+                    document.execCommand('print', false, null);
+                } else {
+                    alert('عذراً، وظيفة الطباعة غير مدعومة في هذا المتصفح/التطبيق. يرجى استخدام متصفح كروم.');
+                }
+            }, 250);
+        } catch (e) {
+            console.error('Print Error:', e);
+            alert('حدث خطأ أثناء محاولة الطباعة.');
+        }
+    };
+
+    if (pL) pL.addEventListener('click', triggerPrint);
+    const pFiber = document.getElementById('print-fiber-btn'), pShop = document.getElementById('print-shop-btn');
+    if (pFiber) pFiber.addEventListener('click', triggerPrint);
+    if (pShop) pShop.addEventListener('click', triggerPrint);
+
+    // Improved Export CSV for Android
     const exportBtn = document.getElementById('export-logs-btn');
     if (exportBtn) {
         exportBtn.addEventListener('click', () => {
-            const logs = getItems('transaction_logs');
-            if (logs.length === 0) { alert('لا توجد بيانات لتصديرها'); return; }
-            let csv = '\uFEFFاليوم,التاريخ,النوع,الصنف,الوحدة,الوزن,العدد,القيمة,الموقع\n';
-            logs.forEach(l => {
-                const dateParts = l.date.split('،');
-                const d = dateParts[0], t = dateParts.length > 1 ? dateParts[1] : l.date;
-                csv += `${d},${t},${transTypes[l.type]?.title || 'تحويل'},${l.name},${l.unit || '-'},${l.weight},${l.count},${l.price},${l.fridge === 'fiber' ? 'الفيبر' : 'المحل'}\n`;
-            });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `سجل_عمليات_أمواج_الصياد_${new Date().toLocaleDateString('ar-SA')}.csv`;
-            link.click();
+            const btn = exportBtn;
+            btn.style.opacity = '0.5';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التصدير...';
+
+            setTimeout(() => {
+                const logs = getItems('transaction_logs');
+                if (logs.length === 0) { 
+                    alert('لا توجد بيانات لتصديرها'); 
+                    btn.style.opacity = '1';
+                    btn.innerHTML = '<i class="fas fa-file-excel"></i> تصدير';
+                    return; 
+                }
+                
+                let csv = '\uFEFFاليوم,التاريخ,النوع,الصنف,الوحدة,الوزن,العدد,القيمة,الموقع\n';
+                logs.forEach(l => {
+                    const dateParts = l.date.split('،');
+                    const d = dateParts[0], t = dateParts.length > 1 ? dateParts[1] : l.date;
+                    csv += `${d},${t},${transTypes[l.type]?.title || 'تحويل'},${l.name},${l.unit || '-'},${l.weight},${l.count},${l.price},${l.fridge === 'fiber' ? 'الفيبر' : 'المحل'}\n`;
+                });
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', `تقرير_أمواج_الصياد_${new Date().toLocaleDateString('ar-SA')}.csv`);
+                
+                // Android WebView Fix: Append to body
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                btn.style.opacity = '1';
+                btn.innerHTML = '<i class="fas fa-file-excel"></i> تصدير';
+                alert('تم تجهيز الملف للتحميل!');
+            }, 500);
         });
     }
     
