@@ -1,42 +1,28 @@
 {
-  "name": "أمواج الصياد - إدارة المخزون",
-  "short_name": "أمواج الصياد",
-  "description": "نظام إدارة مخازن السمك الذكي - نسخة أندرويد",
+  "name": "أمواج الصياد - نظام المخزن",
+  "short_name": "أمواج المخزن",
+  "description": "نظام إدارة المخزن الذكي لمطعم أمواج الصياد",
   "start_url": "./index.html",
   "display": "standalone",
+  "background_color": "#0a0f1d",
+  "theme_color": "#0f172a",
   "orientation": "portrait",
-  "background_color": "#0f172a",
-  "theme_color": "#00d2ff",
+  "lang": "ar",
+  "dir": "rtl",
   "icons": [
     {
-      "src": "logo.jpeg",
+      "src": "logo.png.jpeg",
       "sizes": "192x192",
       "type": "image/jpeg",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "logo.jpeg",
+      "src": "logo.png.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any"
-    },
-    {
-      "src": "logo.jpeg",
-      "sizes": "192x192",
-      "type": "image/jpeg",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
-  "shortcuts": [
-    {
-      "name": "ثلاجة الفيبر",
-      "url": "./index.html#fiber-fridge",
-      "icons": [{ "src": "logo.jpeg", "sizes": "192x192" }]
-    },
-    {
-      "name": "المبيعات",
-      "url": "./index.html#fridge-keeper",
-      "icons": [{ "src": "logo.jpeg", "sizes": "192x192" }]
-    }
-  ]
+  "categories": ["business", "productivity"],
+  "prefer_related_applications": false
 }
