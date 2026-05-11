@@ -424,31 +424,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const fT = document.getElementById('filter-type'), fF = document.getElementById('filter-fridge'), cL = document.getElementById('clear-logs-btn'), pL = document.getElementById('print-logs-btn');
     if (fT) fT.addEventListener('change', renderLogs); if (fF) fF.addEventListener('change', renderLogs);
 
-    // Improved Print Function for Android/Mobile
-    const triggerPrint = () => {
-        try {
-            document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
+    // Robust Print & Share Logic for Android/Mobile
+    const triggerPrint = (sectionId = 'manager') => {
+        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
+        
+        // Android/Mobile Native Share Fallback
+        if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            const section = document.getElementById(sectionId);
+            const title = sectionId === 'manager' ? 'تقرير سجل العمليات' : (sectionId === 'fiber-fridge' ? 'تقرير ثلاجة الفيبر' : 'تقرير ثلاجة المحل');
             
-            // Give UI time to update date fields
+            // Try to use native print first, but offer share if it fails
+            window.print();
+            
+            // Wait to see if print dialog opens, if not, offer sharing
             setTimeout(() => {
-                if (window.print) {
-                    window.print();
-                } else if (document.execCommand) {
-                    document.execCommand('print', false, null);
-                } else {
-                    alert('عذراً، وظيفة الطباعة غير مدعومة في هذا المتصفح/التطبيق. يرجى استخدام متصفح كروم.');
+                if (confirm('إذا لم تظهر قائمة الطباعة، هل تود مشاركة التقرير كـ نص؟')) {
+                    let shareText = `--- ${title} ---\nتاريخ: ${getCurrentDateTime()}\n\n`;
+                    const rows = section.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        let rowText = '';
+                        cells.forEach(c => rowText += c.innerText + ' | ');
+                        shareText += rowText + '\n';
+                    });
+                    
+                    navigator.share({
+                        title: title,
+                        text: shareText
+                    }).catch(err => console.log('Share failed', err));
                 }
-            }, 250);
-        } catch (e) {
-            console.error('Print Error:', e);
-            alert('حدث خطأ أثناء محاولة الطباعة.');
+            }, 3000);
+        } else {
+            // Standard Desktop Print
+            window.print();
         }
     };
 
-    if (pL) pL.addEventListener('click', triggerPrint);
+    if (pL) pL.addEventListener('click', () => triggerPrint('manager'));
     const pFiber = document.getElementById('print-fiber-btn'), pShop = document.getElementById('print-shop-btn');
-    if (pFiber) pFiber.addEventListener('click', triggerPrint);
-    if (pShop) pShop.addEventListener('click', triggerPrint);
+    if (pFiber) pFiber.addEventListener('click', () => triggerPrint('fiber-fridge'));
+    if (pShop) pShop.addEventListener('click', () => triggerPrint('shop-fridge'));
 
     // Improved Export CSV for Android
     const exportBtn = document.getElementById('export-logs-btn');
