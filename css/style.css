@@ -118,7 +118,7 @@ body {
 /* Main Content area */
 .main-content {
     margin-right: 280px;
-    flex-grow: 1;
+    width: calc(100% - 280px);
     padding: 2rem;
     min-height: 100vh;
     background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
@@ -561,7 +561,23 @@ tr:hover td {
 }
 
 /* --- Mobile Optimization (Android/iOS) --- */
-body.is-mobile .sidebar, 
+body.is-mobile .sidebar {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    pointer-events: none !important;
+}
+body.is-mobile .main-content {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 15px !important;
+    padding-bottom: 120px !important;
+}
+body.is-mobile .mobile-nav {
+    display: flex !important;
+}
+
 @media (max-width: 992px) {
     .sidebar {
         display: none !important;
