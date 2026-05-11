@@ -34,23 +34,7 @@
         }
     </script>
     <style>
-        /* Emergency Mobile Fix - Only triggers when is-mobile class is present or screen < 768px */
-        @media (max-width: 768px) {
-            body.is-mobile .sidebar, .sidebar {
-                display: none !important;
-                visibility: hidden !important;
-                width: 0 !important;
-                pointer-events: none !important;
-            }
-            body.is-mobile .main-content, .main-content {
-                margin-right: 0 !important;
-                width: 100% !important;
-                padding-bottom: 120px !important;
-            }
-            body.is-mobile .mobile-nav, .mobile-nav {
-                display: flex !important;
-            }
-        }
+        /* Unified styling is now handled in style.css */
     </style>
 </head>
 <body>
@@ -104,13 +88,19 @@
         </nav>
     </aside>
 
-    <!-- Header for Printing (Hidden by default) -->
-    <div class="print-only-header" style="display: none; width: 100%; border-bottom: 3px double #333; margin-bottom: 2rem; padding-bottom: 1rem;">
-        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <img src="logo.jpeg" style="width: 120px; border-radius: 15px; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <h1 style="color: #1e293b; font-size: 2.2rem; margin: 0;">مطعم أمواج الصياد</h1>
-            <p style="font-size: 1rem; color: #475569; margin-top: 0.5rem;">تاريخ التقرير: <span class="print-date"></span></p>
+    <!-- Header for Printing -->
+    <div class="print-only-header" style="display: none;">
+        <div class="logo-box">
+            <img src="logo.jpeg" alt="Logo">
+            <h1>مطعم أمواج الصياد</h1>
+            <p>تقرير إداري معتمد</p>
+            <p>تاريخ التقرير: <span class="print-date"></span></p>
         </div>
+    </div>
+
+    <!-- Print Footer -->
+    <div class="print-footer" style="display: none;">
+        <p>نظام أمواج الصياد الذكي v2.5 | صدر في: <span class="print-date"></span></p>
     </div>
 
     <!-- Main Content -->
@@ -127,51 +117,55 @@
         <section id="manager" class="section active">
             <!-- Manager Stats / Financial Reports -->
             <div class="grid" style="margin-bottom: 2rem;">
-                <div class="card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.02)); border: 1px solid rgba(16, 185, 129, 0.2);">
+                <div class="card manager-card-animate" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.02)); border: 1px solid rgba(16, 185, 129, 0.2);">
                     <span style="color: #10b981;"><i class="fas fa-arrow-down"></i> إجمالي المشتريات</span>
                     <div id="stats-total-purchase" class="stats" style="color: #10b981; font-size: 1.8rem; margin-top: 0.5rem;">0 ر.س</div>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.02)); border: 1px solid rgba(59, 130, 246, 0.2);">
+                <div class="card manager-card-animate" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.02)); border: 1px solid rgba(59, 130, 246, 0.2);">
                     <span style="color: #3b82f6;"><i class="fas fa-arrow-up"></i> إجمالي المبيعات</span>
                     <div id="stats-total-sales" class="stats" style="color: #3b82f6; font-size: 1.8rem; margin-top: 0.5rem;">0 ر.س</div>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.02)); border: 1px solid rgba(245, 158, 11, 0.2);">
+                <div class="card manager-card-animate" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.02)); border: 1px solid rgba(245, 158, 11, 0.2);">
                     <span style="color: #f59e0b;"><i class="fas fa-undo"></i> إجمالي المرتجعات</span>
                     <div id="stats-total-return" class="stats" style="color: #f59e0b; font-size: 1.8rem; margin-top: 0.5rem;">0 ر.س</div>
                 </div>
-                <div class="card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02)); border: 1px solid rgba(239, 68, 68, 0.2);">
+                <div class="card manager-card-animate" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02)); border: 1px solid rgba(239, 68, 68, 0.2);">
                     <span style="color: #ef4444;"><i class="fas fa-trash-alt"></i> إجمالي التوالف</span>
                     <div id="stats-total-damaged" class="stats" style="color: #ef4444; font-size: 1.8rem; margin-top: 0.5rem;">0 ر.س</div>
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card manager-card-animate">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <h3>سجل العمليات والتقارير</h3>
-                    <div style="display: flex; gap: 1rem;">
-                        <select id="filter-type" class="input-cell" style="width: auto;">
-                            <option value="all">جميع العمليات</option>
-                            <option value="purchase">مشتريات</option>
-                            <option value="sales">مبيعات</option>
-                            <option value="return">مرتجع</option>
-                            <option value="damaged">تالف</option>
-                            <option value="transfer">تحويل</option>
-                        </select>
-                        <select id="filter-fridge" class="input-cell" style="width: auto;">
-                            <option value="all">جميع الثلاجات</option>
-                            <option value="fiber">ثلاجة الفيبر</option>
-                            <option value="shop">ثلاجة المحل</option>
-                        </select>
+                    <div class="reports-toolbar">
+                        <div class="filter-group">
+                            <select id="filter-type" class="input-cell" style="width: auto;">
+                                <option value="all">جميع العمليات</option>
+                                <option value="purchase">مشتريات</option>
+                                <option value="sales">مبيعات</option>
+                                <option value="return">مرتجع</option>
+                                <option value="damaged">تالف</option>
+                                <option value="transfer">تحويل</option>
+                            </select>
+                            <select id="filter-fridge" class="input-cell" style="width: auto;">
+                                <option value="all">جميع الثلاجات</option>
+                                <option value="fiber">ثلاجة الفيبر</option>
+                                <option value="shop">ثلاجة المحل</option>
+                            </select>
+                        </div>
                         <input type="text" id="search-logs" class="input-cell" placeholder="بحث في السجل..." style="width: 200px; margin-top: 0;">
-                        <button id="export-logs-btn" class="btn-primary" style="background: #10b981; margin-top: 0;">
-                            <i class="fas fa-file-excel"></i> تصدير Excel
-                        </button>
-                        <button id="print-logs-btn" class="btn-primary" style="background: #6366f1; margin-top: 0;">
-                            <i class="fas fa-print"></i> طباعة التقرير
-                        </button>
-                        <button id="clear-logs-btn" class="btn-primary" style="background: #ef4444; margin-top: 0;">
-                            <i class="fas fa-trash-alt"></i> مسح السجل
-                        </button>
+                        <div class="action-buttons">
+                            <button id="export-logs-btn" class="btn-primary" style="background: #10b981; margin-top: 0;">
+                                <i class="fas fa-file-excel"></i> <span>تصدير</span>
+                            </button>
+                            <button id="print-logs-btn" class="btn-primary" style="background: #6366f1; margin-top: 0;">
+                                <i class="fas fa-print"></i> <span>طباعة</span>
+                            </button>
+                            <button id="clear-logs-btn" class="btn-primary" style="background: #ef4444; margin-top: 0;">
+                                <i class="fas fa-trash-alt"></i> <span>مسح</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -415,8 +409,8 @@
                             <img src="dev_labib_real.jpg" alt="Developer Image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                         </div>
                         <div class="dev-title-box">
-                            <h2 class="gradient-text">مطور النظام</h2>
-                            <p>خبير حلول التقنية وإدارة المخازن الذكية</p>
+                            <h2 class="gradient-text">لبيب محفوظ الكلعي</h2>
+                            <p>مطور النظام وخبير حلول التقنية الذكية</p>
                         </div>
                     </div>
                     

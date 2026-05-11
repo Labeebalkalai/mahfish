@@ -424,16 +424,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const fT = document.getElementById('filter-type'), fF = document.getElementById('filter-fridge'), cL = document.getElementById('clear-logs-btn'), pL = document.getElementById('print-logs-btn');
     if (fT) fT.addEventListener('change', renderLogs); if (fF) fF.addEventListener('change', renderLogs);
     if (pL) pL.addEventListener('click', () => {
-        document.querySelector('.print-date').textContent = getCurrentDateTime();
+        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
         window.print();
     });
     const pFiber = document.getElementById('print-fiber-btn'), pShop = document.getElementById('print-shop-btn');
     if (pFiber) pFiber.addEventListener('click', () => {
-        document.querySelector('.print-date').textContent = getCurrentDateTime();
+        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
         window.print();
     });
     if (pShop) pShop.addEventListener('click', () => {
-        document.querySelector('.print-date').textContent = getCurrentDateTime();
+        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
         window.print();
     });
 

@@ -152,8 +152,19 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 5px rgba(0, 210, 255, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(0, 210, 255, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(0, 210, 255, 0.2); }
 }
 
 /* Dashboard Cards Mockup */
@@ -184,9 +195,67 @@ body {
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px) scale(1.01);
     border-color: var(--primary-color);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.manager-card-animate {
+    animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+#logs-table-body tr {
+    animation: slideInRight 0.4s ease-out both;
+}
+
+/* Delay for staggered effect */
+#logs-table-body tr:nth-child(1) { animation-delay: 0.1s; }
+#logs-table-body tr:nth-child(2) { animation-delay: 0.15s; }
+#logs-table-body tr:nth-child(3) { animation-delay: 0.2s; }
+#logs-table-body tr:nth-child(4) { animation-delay: 0.25s; }
+#logs-table-body tr:nth-child(5) { animation-delay: 0.3s; }
+
+/* Reports Toolbar Responsiveness */
+.reports-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.filter-group, .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 992px) {
+    .reports-toolbar {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+    .action-buttons {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+    }
+    .action-buttons button {
+        flex: 1;
+        min-width: 80px;
+        justify-content: center;
+        font-size: 0.8rem;
+        padding: 10px 5px !important;
+    }
+    .action-buttons button span {
+        display: none; /* Hide text on very small screens, show icons only if needed, but here we keep icons */
+    }
+}
+
+@media (min-width: 600px) {
+    .action-buttons button span {
+        display: inline;
+    }
 }
 
 .card h3 {
@@ -615,9 +684,10 @@ tr:hover td {
     }
 }
 
-/* --- Consolidated High-Priority Print Styles --- */
+/* --- High-End Professional Print Styles --- */
+/* --- Professional & Clean Print Styles --- */
 @media print {
-    @page { margin: 1cm; size: A4; }
+    @page { margin: 0.5cm; size: landscape; }
     
     * { 
         -webkit-print-color-adjust: exact !important; 
@@ -631,141 +701,149 @@ tr:hover td {
         padding: 0 !important;
         margin: 0 !important;
         direction: rtl !important;
-        font-family: 'Segoe UI', Tahoma, sans-serif !important;
+        overflow: visible !important;
     }
 
-    /* Hide UI Elements */
-    .sidebar, .top-bar, .mobile-nav, #firebase-status, 
-    button, input, select, .suggestions-list, 
-    .health-bar-container, .delete-btn, .duplicate-btn {
+    /* Hide Navigation & UI (Super Priority) */
+    .sidebar, .top-bar, .mobile-nav, body.is-mobile .mobile-nav, 
+    nav.mobile-nav, .mobile-nav-link,
+    #firebase-status, button, input, select, .suggestions-list, 
+    .health-bar-container, .delete-btn, .duplicate-btn, .dev-contact-links {
         display: none !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     .main-content {
         margin: 0 !important;
         width: 100% !important;
-        padding: 0 !important;
+        padding: 0.5cm !important;
         display: block !important;
         background: white !important;
     }
 
     .card {
         display: block !important;
-        border: none !important;
-        box-shadow: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-        margin: 0 0 15px 0 !important;
+        border: 1px solid #ddd !important;
+        background: #fff !important;
+        padding: 15px !important;
+        margin-bottom: 20px !important;
+        border-radius: 10px !important;
+        page-break-inside: avoid;
+        overflow: visible !important;
     }
-    .card::before { display: none !important; }
 
-    /* Modern Print Header */
+    /* Simple & Centered Header */
     .print-only-header {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
-        margin-bottom: 25px !important;
-        padding-bottom: 15px !important;
-        border-bottom: 2px solid #3b82f6 !important;
+        margin-bottom: 20px !important;
+        border-bottom: 2px solid #333 !important;
+        padding-bottom: 10px !important;
+    }
+
+    .print-only-header .logo-box {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
 
     .print-only-header img {
-        width: 90px !important;
-        display: block !important;
-        margin: 0 auto 10px auto !important;
+        width: 70px !important;
+        height: auto !important;
+        margin-bottom: 5px !important;
     }
 
     .print-only-header h1 {
-        display: block !important;
-        font-size: 16pt !important;
-        color: #1e293b !important;
+        font-size: 18pt !important;
         margin: 0 !important;
+        color: #000 !important;
     }
 
-    .print-only-header p {
-        display: block !important;
-        font-size: 9pt !important;
-        color: #475569 !important;
-        margin: 5px 0 !important;
-    }
-
-    /* Stats Summary Grid - Safer Grid Layout */
+    /* Grid layout for Print - 2 columns max */
     .grid {
-        display: grid !important; 
-        grid-template-columns: repeat(2, 1fr) !important; /* 2 columns for better fit */
+        display: flex !important;
+        flex-wrap: wrap !important;
         gap: 10px !important;
-        margin: 15px 0 !important;
-        width: 100% !important;
+        margin-bottom: 15px !important;
     }
 
     .grid .card {
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 8px !important;
-        padding: 8px !important;
-        text-align: center !important;
-        background: #f8fafc !important;
+        flex: 1 1 45% !important;
+        margin-bottom: 10px !important;
+        border: 1px solid #ccc !important;
+        padding: 10px !important;
     }
 
     .stats {
-        font-size: 10pt !important;
+        font-size: 14pt !important;
         font-weight: bold !important;
-        color: #3b82f6 !important;
-        margin: 0 !important;
     }
 
-    /* Professional Table Styling */
+    /* Table Fixes - Optimized for Landscape Print */
     .table-container {
         width: 100% !important;
         overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     table {
         width: 100% !important;
         border-collapse: collapse !important;
+        border: 1px solid #000 !important;
+        table-layout: fixed !important;
         margin-top: 10px !important;
-        border: 1px solid #000 !important;
-        table-layout: auto !important;
-    }
-
-    th {
-        background-color: #3b82f6 !important;
-        color: white !important;
-        padding: 8px 3px !important;
-        border: 1px solid #000 !important;
-        font-size: 8.5pt !important;
-        text-align: center !important;
-        white-space: nowrap !important; /* Prevent headers from wrapping */
-    }
-
-    td {
-        padding: 6px 3px !important;
-        border: 1px solid #000 !important;
-        color: #000 !important;
-        font-size: 8pt !important;
-        text-align: center !important;
+        word-wrap: break-word !important;
         background: white !important;
     }
 
-    /* Fix unreadable badges in print */
-    .badge {
-        background: transparent !important;
-        color: #000 !important;
+    th, td {
+        padding: 6px 2px !important;
         border: 1px solid #000 !important;
-        box-shadow: none !important;
-        padding: 1px 4px !important;
-        font-size: 7.5pt !important;
-        border-radius: 3px !important;
-    }
-
-    h3 {
-        color: #000 !important;
+        font-size: 8.5pt !important;
         text-align: center !important;
-        margin: 15px 0 !important;
-        font-size: 12pt !important;
+        color: #000 !important;
     }
 
-    /* Only show active section */
+    th { background-color: #eee !important; font-weight: bold !important; }
+
+    /* Improved Column Widths for Landscape (8 columns) */
+    #manager table thead tr th:nth-child(1) { width: 8% !important; }  /* اليوم */
+    #manager table thead tr th:nth-child(2) { width: 18% !important; } /* التاريخ */
+    #manager table thead tr th:nth-child(3) { width: 10% !important; } /* النوع */
+    #manager table thead tr th:nth-child(4) { width: 20% !important; } /* الاسم */
+    #manager table thead tr th:nth-child(5) { width: 8% !important; }  /* الوزن */
+    #manager table thead tr th:nth-child(6) { width: 8% !important; }  /* العدد */
+    #manager table thead tr th:nth-child(7) { width: 10% !important; } /* القيمة */
+    #manager table thead tr th:nth-child(8) { width: 18% !important; } /* الموقع */
+
+    /* Special Font Adjustments */
+    td:nth-child(2) { font-size: 8pt !important; }
+    td:nth-child(4) { text-align: right !important; padding-right: 5px !important; }
+
+    /* Keep the "Developer" card looking nice */
+    .dev-card-modern {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+    .dev-avatar-glow { transform: none !important; }
+
+    .print-footer {
+        display: block !important;
+        text-align: center !important;
+        font-size: 8pt !important;
+        margin-top: 20px !important;
+        border-top: 1px solid #ddd !important;
+        padding-top: 10px !important;
+    }
+
     section { display: none !important; }
     section.active { display: block !important; }
 }
