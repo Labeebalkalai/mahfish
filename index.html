@@ -9,6 +9,15 @@
     <title>أمواج الصياد - إدارة المخزون الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        function detectMobile() {
+            const isMob = window.innerWidth <= 992 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            if (isMob) document.body.classList.add('is-mobile');
+            else document.body.classList.remove('is-mobile');
+        }
+        window.addEventListener('resize', detectMobile);
+        window.addEventListener('DOMContentLoaded', detectMobile);
+    </script>
 </head>
 <body>
 
