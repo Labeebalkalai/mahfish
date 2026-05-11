@@ -57,6 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    window.onbeforeprint = () => {
+        const printDateSpan = document.querySelector('.print-date');
+        if (printDateSpan) {
+            printDateSpan.textContent = getCurrentDateTime();
+        }
+    };
+
     const updateDate = () => {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', calendar: 'islamic-uma' };

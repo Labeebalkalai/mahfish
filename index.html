@@ -17,7 +17,7 @@
         function detectMobile() {
             // Only force mobile mode if the screen is physically narrow (< 992px)
             // This allows 'Desktop Mode' on mobile browsers to show the full PC view
-            const isMob = window.innerWidth <= 992;
+            const isMob = window.innerWidth <= 768;
             if (isMob) document.body.classList.add('is-mobile');
             else document.body.classList.remove('is-mobile');
         }
@@ -34,20 +34,22 @@
         }
     </script>
     <style>
-        /* Emergency Mobile Fix - Only triggers when is-mobile class is present */
-        body.is-mobile .sidebar {
-            display: none !important;
-            visibility: hidden !important;
-            width: 0 !important;
-            pointer-events: none !important;
-        }
-        body.is-mobile .main-content {
-            margin-right: 0 !important;
-            width: 100% !important;
-            padding-bottom: 110px !important;
-        }
-        body.is-mobile .mobile-nav {
-            display: flex !important;
+        /* Emergency Mobile Fix - Only triggers when is-mobile class is present or screen < 768px */
+        @media (max-width: 768px) {
+            body.is-mobile .sidebar, .sidebar {
+                display: none !important;
+                visibility: hidden !important;
+                width: 0 !important;
+                pointer-events: none !important;
+            }
+            body.is-mobile .main-content, .main-content {
+                margin-right: 0 !important;
+                width: 100% !important;
+                padding-bottom: 120px !important;
+            }
+            body.is-mobile .mobile-nav, .mobile-nav {
+                display: flex !important;
+            }
         }
     </style>
 </head>
@@ -59,8 +61,7 @@
             <div class="logo-container">
                 <img src="logo.jpeg" alt="Amwaj Al-Sayyad Logo" id="project-logo">
             </div>
-            <h1>أمواج الصياد</h1>
-            <p style="color: var(--text-muted); font-size: 0.8rem;">مخزن السمك</p>
+            <h1>مطعم أمواج الصياد</h1>
         </div>
 
         <nav class="nav-links">
@@ -107,8 +108,7 @@
     <div class="print-only-header" style="display: none; width: 100%; border-bottom: 3px double #333; margin-bottom: 2rem; padding-bottom: 1rem;">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
             <img src="logo.jpeg" style="width: 120px; border-radius: 15px; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <h1 style="color: #1e293b; font-size: 2.2rem; margin: 0;">مؤسسة أمواج الصياد</h1>
-            <p style="color: #64748b; margin: 0.2rem 0; font-size: 1.2rem; font-weight: 600;">لتجارة وتخزين الأسماك</p>
+            <h1 style="color: #1e293b; font-size: 2.2rem; margin: 0;">مطعم أمواج الصياد</h1>
             <p style="font-size: 1rem; color: #475569; margin-top: 0.5rem;">تاريخ التقرير: <span class="print-date"></span></p>
         </div>
     </div>
@@ -167,7 +167,7 @@
                             <i class="fas fa-file-excel"></i> تصدير Excel
                         </button>
                         <button id="print-logs-btn" class="btn-primary" style="background: #6366f1; margin-top: 0;">
-                            <i class="fas fa-print"></i> طباعة
+                            <i class="fas fa-print"></i> طباعة التقرير
                         </button>
                         <button id="clear-logs-btn" class="btn-primary" style="background: #ef4444; margin-top: 0;">
                             <i class="fas fa-trash-alt"></i> مسح السجل
@@ -227,8 +227,7 @@
                         <span>تحويل إلى ثلاجة المحل</span>
                     </button>
                     <button id="print-fiber-btn" class="btn-primary" style="background: #6366f1; margin-top: 0;">
-                        <i class="fas fa-print"></i>
-                        <span>طباعة الجرد</span>
+                        <i class="fas fa-print"></i> طباعة الجرد
                     </button>
                 </div>
 
@@ -318,8 +317,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h3>محتويات ثلاجة المحل</h3>
                     <button id="print-shop-btn" class="btn-primary" style="background: #6366f1; margin-top: 0;">
-                        <i class="fas fa-print"></i>
-                        <span>طباعة الجرد</span>
+                        <i class="fas fa-print"></i> طباعة الجرد
                     </button>
                 </div>
                 <div class="table-container">
@@ -534,6 +532,10 @@
         <a href="#" class="mobile-nav-link" data-section="fridge-keeper">
             <i class="fas fa-key"></i>
             <span>الأمين</span>
+        </a>
+        <a href="#" class="mobile-nav-link" data-section="developer">
+            <i class="fas fa-code"></i>
+            <span>المطور</span>
         </a>
         <a href="#" class="mobile-nav-link" data-section="settings">
             <i class="fas fa-cog"></i>

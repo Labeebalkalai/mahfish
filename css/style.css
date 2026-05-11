@@ -321,7 +321,8 @@ body {
     gap: 5px;
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    padding: 5px 2px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     flex: 1;
 }
@@ -517,21 +518,23 @@ tr:hover td {
 }
 
 /* --- Mobile Optimization (Android/iOS) --- */
-body.is-mobile .sidebar {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    pointer-events: none !important;
-}
-body.is-mobile .main-content {
-    margin-right: 0 !important;
-    margin-left: 0 !important;
-    width: 100% !important;
-    padding: 15px !important;
-    padding-bottom: 120px !important;
-}
-body.is-mobile .mobile-nav {
-    display: flex !important;
+@media (max-width: 768px) {
+    body.is-mobile .sidebar, .sidebar {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        pointer-events: none !important;
+    }
+    body.is-mobile .main-content, .main-content {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 15px !important;
+        padding-bottom: 120px !important;
+    }
+    body.is-mobile .mobile-nav, .mobile-nav {
+        display: flex !important;
+    }
 }
 
 /* PWA Standalone Mode Fixes */
@@ -542,7 +545,7 @@ body.is-mobile .mobile-nav {
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
     .sidebar {
         display: none !important;
         visibility: hidden !important;
@@ -612,26 +615,30 @@ body.is-mobile .mobile-nav {
     }
 }
 
-/* --- Final Priority Print Styles (Must be at the end) --- */
+/* --- Consolidated High-Priority Print Styles --- */
 @media print {
-    @page { margin: 0.5cm; size: auto; }
+    @page { margin: 1cm; size: A4; }
     
-    /* Force hide mobile elements */
-    .sidebar, .top-bar, .mobile-nav, #firebase-status, button, input, select {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
+    * { 
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important; 
     }
 
     body {
         background: white !important;
-        color: black !important;
+        color: #000 !important;
         width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
-        -webkit-print-color-adjust: exact !important;
+        direction: rtl !important;
+        font-family: 'Segoe UI', Tahoma, sans-serif !important;
+    }
+
+    /* Hide UI Elements */
+    .sidebar, .top-bar, .mobile-nav, #firebase-status, 
+    button, input, select, .suggestions-list, 
+    .health-bar-container, .delete-btn, .duplicate-btn {
+        display: none !important;
     }
 
     .main-content {
@@ -639,79 +646,127 @@ body.is-mobile .mobile-nav {
         width: 100% !important;
         padding: 0 !important;
         display: block !important;
+        background: white !important;
     }
 
     .card {
         display: block !important;
         border: none !important;
         box-shadow: none !important;
-        background: white !important;
+        background: transparent !important;
         padding: 0 !important;
-        margin: 0 !important;
+        margin: 0 0 15px 0 !important;
     }
+    .card::before { display: none !important; }
 
-    /* Center Header & Logo */
+    /* Modern Print Header */
     .print-only-header {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
-        margin-bottom: 20px !important;
-        border-bottom: 2px solid #000 !important;
+        margin-bottom: 25px !important;
         padding-bottom: 15px !important;
-        width: 100% !important;
+        border-bottom: 2px solid #3b82f6 !important;
     }
 
     .print-only-header img {
-        width: 100px !important;
-        margin-bottom: 10px !important;
+        width: 90px !important;
+        display: block !important;
+        margin: 0 auto 10px auto !important;
     }
 
-    /* Stats Grid */
+    .print-only-header h1 {
+        display: block !important;
+        font-size: 16pt !important;
+        color: #1e293b !important;
+        margin: 0 !important;
+    }
+
+    .print-only-header p {
+        display: block !important;
+        font-size: 9pt !important;
+        color: #475569 !important;
+        margin: 5px 0 !important;
+    }
+
+    /* Stats Summary Grid - Safer Grid Layout */
     .grid {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: center !important;
+        display: grid !important; 
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 columns for better fit */
         gap: 10px !important;
         margin: 15px 0 !important;
         width: 100% !important;
     }
 
     .grid .card {
-        flex: 1 !important;
-        border: 1px solid #ccc !important;
-        padding: 5px !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 8px !important;
         text-align: center !important;
+        background: #f8fafc !important;
     }
 
-    /* Table Fixes for Mobile Print */
+    .stats {
+        font-size: 10pt !important;
+        font-weight: bold !important;
+        color: #3b82f6 !important;
+        margin: 0 !important;
+    }
+
+    /* Professional Table Styling */
     .table-container {
         width: 100% !important;
         overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
     }
 
     table {
         width: 100% !important;
-        max-width: 100% !important;
         border-collapse: collapse !important;
-        table-layout: fixed !important; /* Forces table to stay within page width */
-        font-size: 8pt !important; /* Smaller font for mobile print */
-    }
-
-    th, td {
+        margin-top: 10px !important;
         border: 1px solid #000 !important;
-        padding: 4px 2px !important;
-        text-align: center !important;
-        word-wrap: break-word !important;
+        table-layout: auto !important;
     }
 
-    th { background: #f0f0f0 !important; }
+    th {
+        background-color: #3b82f6 !important;
+        color: white !important;
+        padding: 8px 3px !important;
+        border: 1px solid #000 !important;
+        font-size: 8.5pt !important;
+        text-align: center !important;
+        white-space: nowrap !important; /* Prevent headers from wrapping */
+    }
 
-    /* Show only active section */
+    td {
+        padding: 6px 3px !important;
+        border: 1px solid #000 !important;
+        color: #000 !important;
+        font-size: 8pt !important;
+        text-align: center !important;
+        background: white !important;
+    }
+
+    /* Fix unreadable badges in print */
+    .badge {
+        background: transparent !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+        padding: 1px 4px !important;
+        font-size: 7.5pt !important;
+        border-radius: 3px !important;
+    }
+
+    h3 {
+        color: #000 !important;
+        text-align: center !important;
+        margin: 15px 0 !important;
+        font-size: 12pt !important;
+    }
+
+    /* Only show active section */
     section { display: none !important; }
     section.active { display: block !important; }
 }
-
 
