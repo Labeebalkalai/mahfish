@@ -14,18 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Load Settings
-    let lowStockThreshold = parseFloat(localStorage.getItem('low_stock_threshold')) || 10;
+    let lowStockThreshold = parseFloat(localStorage.getItem('lowStockThreshold')) || 10;
     const thresholdInput = document.getElementById('threshold-input');
     if (thresholdInput) thresholdInput.value = lowStockThreshold;
 
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyAFlBpJY53TwsqvFsfgfoLeTTjzKDGB5Ms",
+        authDomain: "amwaaa-c514a.firebaseapp.com",
+        databaseURL: "https://amwaaa-c514a-default-rtdb.firebaseio.com",
+        projectId: "amwaaa-c514a",
+        storageBucket: "amwaaa-c514a.firebasestorage.app",
+        messagingSenderId: "395157441882",
+        appId: "1:395157441882:web:41d226cbbb2059439a7763",
+        measurementId: "G-5HZEGLQXJW"
     };
 
     // --- Navigation Logic (Desktop & Mobile Sync) ---
@@ -73,27 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     updateDate();
 
-    // --- Firebase Logic ---
-    if (typeof firebase !== 'undefined') {
-        try {
-            firebase.initializeApp(firebaseConfig);
-            const db = firebase.database();
-            db.ref('fiber_fridge_items').on('value', (s) => { 
-                localStorage.setItem('fiber_fridge_items', JSON.stringify(s.val() ? Object.values(s.val()) : [])); 
-                renderFridgeTable('fiber'); 
-            });
-            db.ref('shop_fridge_items').on('value', (s) => { 
-                localStorage.setItem('shop_fridge_items', JSON.stringify(s.val() ? Object.values(s.val()) : [])); 
-                renderFridgeTable('shop'); 
-            });
-            db.ref('transaction_logs').on('value', (s) => { 
-                localStorage.setItem('transaction_logs', JSON.stringify(s.val() ? Object.values(s.val()) : [])); 
-                renderLogs(); 
-            });
-        } catch (err) {
-            console.error("Firebase init error:", err);
-        }
-    }
 
     const getCurrentDateTime = () => new Date().toLocaleString('ar-SA', { 
         weekday: 'long', 
@@ -555,6 +535,60 @@ document.addEventListener('DOMContentLoaded', () => {
                 location.reload();
             }
         });
+    }
+
+    // --- Firebase Logic (Improved for Debugging) ---
+    const statusDot = document.getElementById('firebase-status');
+    if (typeof firebase !== 'undefined') {
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.database();
+            
+            // Check connection status
+            db.ref(".info/connected").on("value", (snap) => {
+                if (snap.val() === true) {
+                    if (statusDot) {
+                        statusDot.style.background = '#10b981';
+                        statusDot.title = "متصل بالسحابة";
+                    }
+                    console.log("Connected to Firebase");
+                } else {
+                    if (statusDot) {
+                        statusDot.style.background = '#f59e0b';
+                        statusDot.title = "جاري الاتصال...";
+                    }
+                }
+            });
+
+            const sync = (path, localKey, renderFn) => {
+                db.ref(path).on('value', (s) => {
+                    const cloudData = s.val();
+                    if (cloudData) {
+                        const items = Array.isArray(cloudData) ? cloudData : Object.values(cloudData);
+                        localStorage.setItem(localKey, JSON.stringify(items));
+                        if (renderFn) renderFn();
+                    } else {
+                        const localData = localStorage.getItem(localKey);
+                        if (localData && JSON.parse(localData).length > 0) {
+                            db.ref(path).set(JSON.parse(localData)).catch(e => console.error("Sync error:", e));
+                        }
+                    }
+                }, (err) => {
+                    console.error("Permission denied or error:", err);
+                    if (statusDot) statusDot.style.background = '#ef4444';
+                });
+            };
+
+            sync('fiber_fridge_items', 'fiber_fridge_items', () => renderFridgeTable('fiber'));
+            sync('shop_fridge_items', 'shop_fridge_items', () => renderFridgeTable('shop'));
+            sync('transaction_logs', 'transaction_logs', renderLogs);
+
+        } catch (err) {
+            console.error("Firebase init error:", err);
+            if (statusDot) statusDot.style.background = '#ef4444';
+        }
+    } else {
+        if (statusDot) statusDot.style.background = '#334155';
     }
 
     // Initial load
