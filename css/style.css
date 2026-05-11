@@ -338,75 +338,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Mobile Optimization (Android/iOS) --- */
-@media (max-width: 992px) {
-    .sidebar {
-        display: none !important;
-        visibility: hidden;
-        pointer-events: none;
-    }
 
-    .main-content {
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-        width: 100% !important;
-        padding: 15px !important;
-        padding-bottom: 120px !important; /* Extra space for nav */
-    }
-
-    .top-bar {
-        padding: 1rem !important;
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .grid {
-        grid-template-columns: 1fr !important;
-        gap: 15px !important;
-    }
-
-    .card {
-        padding: 1.5rem !important;
-    }
-
-    .stats {
-        font-size: 1.4rem !important;
-    }
-
-    .table-container {
-        margin: 10px -15px;
-        border-radius: 0;
-        width: calc(100% + 30px);
-        overflow-x: auto;
-    }
-
-    table {
-        min-width: 700px;
-    }
-
-    .transaction-buttons {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 10px;
-    }
-
-    .mobile-nav {
-        display: flex !important;
-    }
-    
-    /* Adjust Developer Section for Mobile */
-    .dev-card-modern {
-        padding: 2rem 1.5rem !important;
-    }
-    .dev-profile-header {
-        flex-direction: column;
-        text-align: center;
-        gap: 1.5rem;
-    }
-    .dev-feature-grid {
-        grid-template-columns: 1fr !important;
-    }
-}
 
 /* Premium Floating Bottom Nav */
 .mobile-nav {
@@ -628,20 +560,74 @@ tr:hover td {
     color: #ef4444 !important;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* --- Mobile Optimization (Android/iOS) --- */
+@media (max-width: 992px) {
     .sidebar {
-        width: 70px;
+        display: none !important;
+        visibility: hidden;
+        pointer-events: none;
     }
-    .sidebar-header h1, .nav-link span {
-        display: none;
-    }
+
     .main-content {
-        margin-right: 70px;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 15px !important;
+        padding-bottom: 120px !important; /* Space for floating nav */
     }
-    .logo-container {
-        width: 40px;
-        height: 40px;
-        padding: 5px;
+
+    .top-bar {
+        padding: 1rem !important;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    .card {
+        padding: 1.5rem !important;
+    }
+
+    .stats {
+        font-size: 1.4rem !important;
+    }
+
+    .table-container {
+        margin: 10px -15px;
+        border-radius: 0;
+        width: calc(100% + 30px);
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    .transaction-buttons {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px;
+    }
+
+    .mobile-nav {
+        display: flex !important;
+    }
+    
+    /* Adjust Developer Section for Mobile */
+    .dev-card-modern {
+        padding: 2rem 1.5rem !important;
+    }
+    .dev-profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .dev-feature-grid {
+        grid-template-columns: 1fr !important;
     }
 }
+
+
