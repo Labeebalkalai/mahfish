@@ -848,3 +848,59 @@ tr:hover td {
     section.active { display: block !important; }
 }
 
+/* PDF Generation Overrides (Mirrors Print Styles) */
+body.is-pdf-generating {
+    background: white !important;
+    color: black !important;
+}
+
+body.is-pdf-generating .sidebar,
+body.is-pdf-generating .top-bar,
+body.is-pdf-generating .mobile-nav,
+body.is-pdf-generating button,
+body.is-pdf-generating .action-buttons,
+body.is-pdf-generating .health-bar-container {
+    display: none !important;
+}
+
+body.is-pdf-generating .main-content {
+    margin: 0 !important;
+    width: 100% !important;
+    padding: 0.5in !important;
+}
+
+body.is-pdf-generating .print-only-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin-bottom: 30px !important;
+}
+
+body.is-pdf-generating .print-footer {
+    display: block !important;
+    text-align: center !important;
+    margin-top: 30px !important;
+    border-top: 1px solid #ccc !important;
+}
+
+body.is-pdf-generating .card {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #eee !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+body.is-pdf-generating table {
+    background: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+}
+
+body.is-pdf-generating th, 
+body.is-pdf-generating td {
+    border: 1px solid black !important;
+    color: black !important;
+}
+
+

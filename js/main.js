@@ -424,10 +424,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const fT = document.getElementById('filter-type'), fF = document.getElementById('filter-fridge'), cL = document.getElementById('clear-logs-btn'), pL = document.getElementById('print-logs-btn');
     if (fT) fT.addEventListener('change', renderLogs); if (fF) fF.addEventListener('change', renderLogs);
 
-    // Standard Print Logic
+    // Enhanced Print/PDF Logic for Android & Desktop
     const triggerPrint = (sectionId) => {
-        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
-        window.print();
+        const printDate = getCurrentDateTime();
+        document.querySelectorAll('.print-date').forEach(el => el.textContent = printDate);
+
+        // Detect if the user is on Android
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        
+        if (isAndroid && typeof html2pdf !== 'undefined') {
+            const btn = document.activeElement;
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تجهيز PDF...';
+            }
+
+            // Prepare elements for PDF capture
+            document.body.classList.add('is-pdf-generating');
+            
+            const element = document.querySelector('.main-content');
+            const opt = {
+                margin:       [0.5, 0.3],
+                filename:     `تقرير_أمواج_الصياد_${sectionId}_${new Date().toLocaleDateString('ar-SA')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true,
+                    letterRendering: true,
+                    scrollY: 0
+                },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+
+            // Run html2pdf
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.body.classList.remove('is-pdf-generating');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            }).catch(err => {
+                console.error("PDF Error:", err);
+                document.body.classList.remove('is-pdf-generating');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+                alert("عذراً، فشل تصدير PDF. حاول مرة أخرى.");
+            });
+        } else {
+            // Standard print for Desktop/iOS
+            window.print();
+        }
     };
 
     if (pL) pL.addEventListener('click', () => triggerPrint('manager'));
