@@ -443,20 +443,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Prepare elements for PDF capture
             document.body.classList.add('is-pdf-generating');
             
-            // Critical: Force body width for accurate capture on mobile
             const originalBodyWidth = document.body.style.width;
             document.body.style.width = '800px';
 
             const element = document.body; 
             const opt = {
-                margin:       [10, 5, 10, 5], 
+                margin:       [15, 10, 15, 10], // Increased margins for professional look
                 filename:     `تقرير_أمواج_الصياد_${sectionId}_${new Date().toLocaleDateString('ar-SA')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
+                image:        { type: 'jpeg', quality: 1 }, // Maximum quality
                 html2canvas:  { 
-                    scale: 2, 
+                    scale: 3, // High Resolution (Clearer text)
                     useCORS: true,
                     letterRendering: true,
-                    windowWidth: 800, // Matches the fixed width
+                    windowWidth: 800,
                     scrollX: 0,
                     scrollY: 0,
                     x: 0

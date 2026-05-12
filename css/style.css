@@ -848,100 +848,108 @@ tr:hover td {
     section.active { display: block !important; }
 }
 
-/* PDF Generation Overrides (Mirrors Print Styles) */
+/* PDF Generation Overrides (Final Pro Solution) */
 body.is-pdf-generating {
     background: white !important;
     color: black !important;
-    width: 800px !important; /* Fixed width for consistent capture */
+    width: 800px !important;
     margin: 0 !important;
     padding: 0 !important;
-    direction: rtl !important;
+    display: block !important; /* Ensure vertical stack */
 }
 
 body.is-pdf-generating .sidebar,
-body.is-pdf-generating .top-bar,
 body.is-pdf-generating .mobile-nav,
+body.is-pdf-generating .top-bar,
 body.is-pdf-generating button,
-body.is-pdf-generating .action-buttons,
-body.is-pdf-generating .health-bar-container,
 body.is-pdf-generating .reports-toolbar,
-body.is-pdf-generating input,
-body.is-pdf-generating select {
+body.is-pdf-generating .health-bar-container {
     display: none !important;
+}
+
+body.is-pdf-generating .print-only-header {
+    display: block !important; /* Block instead of flex for stacking */
+    width: 100% !important;
+    text-align: center !important;
+    padding: 20px 0 !important;
+    margin: 0 0 20px 0 !important;
+    border-bottom: 3px solid black !important;
+}
+
+body.is-pdf-generating .print-only-header img {
+    width: 120px !important;
+    height: auto !important;
+    margin: 0 auto 10px !important;
+    display: block !important;
+}
+
+body.is-pdf-generating .print-only-header h1 {
+    color: black !important;
+    font-size: 24pt !important;
+    margin: 10px 0 !important;
 }
 
 body.is-pdf-generating .main-content {
     margin: 0 !important;
     width: 800px !important;
-    padding: 20px !important;
-    background: white !important;
-    display: block !important;
-}
-
-body.is-pdf-generating .print-only-header {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    margin-bottom: 20px !important;
     padding: 10px !important;
-    border-bottom: 2px solid #333 !important;
+    background: white !important;
+}
+
+body.is-pdf-generating .grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 15px !important;
+    margin-bottom: 30px !important;
+}
+
+body.is-pdf-generating .card {
+    background: #fdfdfd !important;
+    border: 2px solid #000 !important; /* Thicker border for clarity */
     color: black !important;
-    width: 100% !important;
+    padding: 20px !important;
 }
 
-body.is-pdf-generating .print-only-header img {
-    width: 100px !important; /* Fixed Logo Size for PDF */
-    height: auto !important;
-    margin-bottom: 10px !important;
+/* Force all text inside cards to be BLACK and BOLD */
+body.is-pdf-generating .card *,
+body.is-pdf-generating .stats,
+body.is-pdf-generating .card span,
+body.is-pdf-generating .card div {
+    color: black !important;
+    font-weight: bold !important;
+    background: none !important;
 }
 
-body.is-pdf-generating .print-only-header h1 {
+body.is-pdf-generating .stats {
     font-size: 20pt !important;
+}
+
+body.is-pdf-generating table {
+    width: 100% !important;
+    border: 2px solid black !important;
+    border-collapse: collapse !important;
+}
+
+body.is-pdf-generating th {
+    background: #e2e2e2 !important;
     color: black !important;
-    margin: 0 !important;
+    font-weight: bold !important;
+    border: 1px solid black !important;
+}
+
+body.is-pdf-generating td {
+    color: black !important;
+    border: 1px solid black !important;
+    background: white !important;
+    font-weight: 500 !important;
 }
 
 body.is-pdf-generating .print-footer {
     display: block !important;
     text-align: center !important;
-    margin-top: 20px !important;
-    border-top: 1px solid #ccc !important;
-    padding: 10px !important;
-    font-size: 10pt !important;
-}
-
-body.is-pdf-generating .card {
-    background: white !important;
+    padding: 20px !important;
+    border-top: 2px solid black !important;
     color: black !important;
-    border: 1px solid #eee !important;
-    box-shadow: none !important;
-    margin-bottom: 15px !important;
-    width: 100% !important;
-}
-
-body.is-pdf-generating .grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important; /* Force 2 columns for cards in PDF */
-    gap: 15px !important;
-}
-
-body.is-pdf-generating table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    margin-top: 15px !important;
-}
-
-body.is-pdf-generating th, 
-body.is-pdf-generating td {
-    border: 1px solid black !important;
-    padding: 8px !important;
-    font-size: 9pt !important;
-    text-align: center !important;
-}
-
-body.is-pdf-generating th {
-    background: #f0f0f0 !important;
 }
 
 
