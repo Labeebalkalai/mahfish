@@ -852,8 +852,10 @@ tr:hover td {
 body.is-pdf-generating {
     background: white !important;
     color: black !important;
-    width: 210mm !important; /* Standard A4 Width */
-    margin: 0 auto !important;
+    width: 800px !important; /* Fixed width for consistent capture */
+    margin: 0 !important;
+    padding: 0 !important;
+    direction: rtl !important;
 }
 
 body.is-pdf-generating .sidebar,
@@ -862,32 +864,42 @@ body.is-pdf-generating .mobile-nav,
 body.is-pdf-generating button,
 body.is-pdf-generating .action-buttons,
 body.is-pdf-generating .health-bar-container,
-body.is-pdf-generating .reports-toolbar, /* إخفاء شريط البحث والفلترة */
+body.is-pdf-generating .reports-toolbar,
 body.is-pdf-generating input,
 body.is-pdf-generating select {
     display: none !important;
-    visibility: hidden !important;
 }
 
 body.is-pdf-generating .main-content {
     margin: 0 !important;
-    width: 100% !important;
-    padding: 0 !important;
+    width: 800px !important;
+    padding: 20px !important;
     background: white !important;
+    display: block !important;
 }
 
 body.is-pdf-generating .print-only-header {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+    text-align: center !important;
     margin-bottom: 20px !important;
-    padding: 20px !important;
+    padding: 10px !important;
     border-bottom: 2px solid #333 !important;
     color: black !important;
+    width: 100% !important;
 }
 
-body.is-pdf-generating .print-only-header * {
+body.is-pdf-generating .print-only-header img {
+    width: 100px !important; /* Fixed Logo Size for PDF */
+    height: auto !important;
+    margin-bottom: 10px !important;
+}
+
+body.is-pdf-generating .print-only-header h1 {
+    font-size: 20pt !important;
     color: black !important;
+    margin: 0 !important;
 }
 
 body.is-pdf-generating .print-footer {
@@ -896,42 +908,40 @@ body.is-pdf-generating .print-footer {
     margin-top: 20px !important;
     border-top: 1px solid #ccc !important;
     padding: 10px !important;
-    color: #666 !important;
+    font-size: 10pt !important;
 }
 
 body.is-pdf-generating .card {
     background: white !important;
     color: black !important;
-    border: 1px solid #ddd !important;
+    border: 1px solid #eee !important;
     box-shadow: none !important;
-    transform: none !important;
     margin-bottom: 15px !important;
-    padding: 15px !important;
+    width: 100% !important;
 }
 
-body.is-pdf-generating .card h3, 
-body.is-pdf-generating .card span,
-body.is-pdf-generating .stats {
-    color: black !important;
+body.is-pdf-generating .grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* Force 2 columns for cards in PDF */
+    gap: 15px !important;
 }
 
 body.is-pdf-generating table {
-    background: white !important;
-    color: black !important;
-    border: 1px solid black !important;
     width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 15px !important;
 }
 
 body.is-pdf-generating th, 
 body.is-pdf-generating td {
     border: 1px solid black !important;
-    color: black !important;
     padding: 8px !important;
-    font-size: 10pt !important;
+    font-size: 9pt !important;
+    text-align: center !important;
 }
 
 body.is-pdf-generating th {
-    background-color: #f2f2f2 !important;
+    background: #f0f0f0 !important;
 }
 
 

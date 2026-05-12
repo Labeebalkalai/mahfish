@@ -443,18 +443,23 @@ document.addEventListener('DOMContentLoaded', () => {
             // Prepare elements for PDF capture
             document.body.classList.add('is-pdf-generating');
             
-            // Capture the whole body to include headers/footers
+            // Critical: Force body width for accurate capture on mobile
+            const originalBodyWidth = document.body.style.width;
+            document.body.style.width = '800px';
+
             const element = document.body; 
             const opt = {
-                margin:       [10, 5, 10, 5], // Top, Left, Bottom, Right in mm
+                margin:       [10, 5, 10, 5], 
                 filename:     `تقرير_أمواج_الصياد_${sectionId}_${new Date().toLocaleDateString('ar-SA')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true,
                     letterRendering: true,
-                    windowWidth: 1200, // Force a desktop-like width for better table layout
-                    scrollY: 0
+                    windowWidth: 800, // Matches the fixed width
+                    scrollX: 0,
+                    scrollY: 0,
+                    x: 0
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
@@ -462,6 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Run html2pdf
             html2pdf().set(opt).from(element).save().then(() => {
                 document.body.classList.remove('is-pdf-generating');
+                document.body.style.width = originalBodyWidth;
                 if (btn) {
                     btn.disabled = false;
                     btn.innerHTML = originalText;
@@ -469,11 +475,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }).catch(err => {
                 console.error("PDF Error:", err);
                 document.body.classList.remove('is-pdf-generating');
+                document.body.style.width = originalBodyWidth;
                 if (btn) {
                     btn.disabled = false;
                     btn.innerHTML = originalText;
                 }
-                alert("عذراً، فشل تصدير PDF. حاول مرة أخرى.");
+                alert("عذراً، فشل تصدير PDF.");
             });
         } else {
             // Standard print for Desktop/iOS
