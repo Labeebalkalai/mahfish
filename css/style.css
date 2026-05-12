@@ -848,7 +848,7 @@ tr:hover td {
     section.active { display: block !important; }
 }
 
-/* PDF Generation Overrides (Final Pro Solution) */
+/* --- إصلاحات خاصة لوضع تصدير PDF (تعمل فقط عند الطلب) --- */
 body.is-pdf-generating {
     background: white !important;
     color: black !important;
@@ -858,10 +858,7 @@ body.is-pdf-generating {
     display: block !important;
 }
 
-/* تعطيل الأنميشن تماماً لضمان ظهور البيانات */
-body.is-pdf-generating *, 
-body.is-pdf-generating *::before, 
-body.is-pdf-generating *::after {
+body.is-pdf-generating * {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
@@ -882,7 +879,7 @@ body.is-pdf-generating .print-only-header {
     width: 100% !important;
     text-align: center !important;
     padding: 20px 0 !important;
-    margin: 0 0 20px 0 !important;
+    margin-bottom: 20px !important;
     border-bottom: 3px solid black !important;
 }
 
@@ -900,18 +897,11 @@ body.is-pdf-generating .main-content {
     background: white !important;
 }
 
-body.is-pdf-generating .grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 15px !important;
-    margin-bottom: 30px !important;
-}
-
 body.is-pdf-generating .card {
     background: #fdfdfd !important;
     border: 2px solid #000 !important;
     color: black !important;
-    padding: 20px !important;
+    margin-bottom: 15px !important;
 }
 
 body.is-pdf-generating .card *,
@@ -919,13 +909,6 @@ body.is-pdf-generating .stats,
 body.is-pdf-generating .card span {
     color: black !important;
     font-weight: bold !important;
-}
-
-body.is-pdf-generating .badge {
-    color: black !important;
-    border: 1px solid black !important;
-    background: #eee !important; /* لون خلفية خفيف للأوسمة لتمييزها */
-    box-shadow: none !important;
 }
 
 body.is-pdf-generating table {
