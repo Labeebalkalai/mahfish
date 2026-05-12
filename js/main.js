@@ -424,93 +424,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const fT = document.getElementById('filter-type'), fF = document.getElementById('filter-fridge'), cL = document.getElementById('clear-logs-btn'), pL = document.getElementById('print-logs-btn');
     if (fT) fT.addEventListener('change', renderLogs); if (fF) fF.addEventListener('change', renderLogs);
 
-    // Robust Print & PDF Logic for Android/Mobile
-    const triggerPrint = (sectionId = 'manager') => {
-        const btn = event.currentTarget;
-        const originalHTML = btn.innerHTML;
-        btn.style.opacity = '0.5';
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحضير...';
-
-        try {
-            // Update dates
-            document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
-            
-            // Standard Print First (For Desktop)
-            if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                window.print();
-                btn.style.opacity = '1';
-                btn.innerHTML = originalHTML;
-                return;
-            }
-
-            // Android/Mobile - PDF Generation Strategy
-            const section = document.getElementById(sectionId);
-            const printHeader = document.querySelector('.print-only-header');
-            const printFooter = document.querySelector('.print-footer');
-            
-            // Temporary visibility for capture
-            printHeader.style.display = 'block';
-            printFooter.style.display = 'block';
-            
-            // Create a temporary container to render the report
-            const tempDiv = document.createElement('div');
-            tempDiv.style.padding = '20px';
-            tempDiv.style.background = 'white';
-            tempDiv.style.width = '1200px'; // Wide for landscape-like capture
-            tempDiv.style.position = 'fixed';
-            tempDiv.style.top = '-10000px';
-            tempDiv.style.left = '-10000px';
-            tempDiv.style.direction = 'rtl';
-            
-            tempDiv.appendChild(printHeader.cloneNode(true));
-            tempDiv.appendChild(section.cloneNode(true));
-            tempDiv.appendChild(printFooter.cloneNode(true));
-            
-            // Clean UI elements from clone
-            tempDiv.querySelectorAll('button, input, select, .reports-toolbar').forEach(el => el.style.display = 'none');
-            
-            document.body.appendChild(tempDiv);
-
-            html2canvas(tempDiv, {
-                scale: 2, // High resolution
-                useCORS: true,
-                backgroundColor: '#ffffff'
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/jpeg', 0.8);
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape
-                const imgProps = pdf.getImageProperties(imgData);
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                
-                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save(`تقرير_أمواج_الصياد_${new Date().toLocaleDateString('ar-SA')}.pdf`);
-                
-                // Cleanup
-                document.body.removeChild(tempDiv);
-                printHeader.style.display = 'none';
-                printFooter.style.display = 'none';
-                btn.style.opacity = '1';
-                btn.innerHTML = originalHTML;
-                alert('تم توليد التقرير بنجاح كملف PDF!');
-            }).catch(err => {
-                console.error('PDF Error:', err);
-                alert('حدث خطأ أثناء توليد الـ PDF. يرجى المحاولة مرة أخرى.');
-                btn.style.opacity = '1';
-                btn.innerHTML = originalHTML;
-            });
-
-        } catch (e) {
-            console.error('Print Error:', e);
-            btn.style.opacity = '1';
-            btn.innerHTML = originalHTML;
-        }
+    // Standard Print Logic
+    const triggerPrint = (sectionId) => {
+        document.querySelectorAll('.print-date').forEach(el => el.textContent = getCurrentDateTime());
+        window.print();
     };
 
-    if (pL) pL.addEventListener('click', (e) => triggerPrint('manager'));
+    if (pL) pL.addEventListener('click', () => triggerPrint('manager'));
     const pFiber = document.getElementById('print-fiber-btn'), pShop = document.getElementById('print-shop-btn');
-    if (pFiber) pFiber.addEventListener('click', (e) => triggerPrint('fiber-fridge'));
-    if (pShop) pShop.addEventListener('click', (e) => triggerPrint('shop-fridge'));
+    if (pFiber) pFiber.addEventListener('click', () => triggerPrint('fiber-fridge'));
+    if (pShop) pShop.addEventListener('click', () => triggerPrint('shop-fridge'));
 
     // Improved Export CSV for Android
     const exportBtn = document.getElementById('export-logs-btn');
