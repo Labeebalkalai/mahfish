@@ -443,18 +443,20 @@ document.addEventListener('DOMContentLoaded', () => {
             // Prepare elements for PDF capture
             document.body.classList.add('is-pdf-generating');
             
-            const element = document.querySelector('.main-content');
+            // Capture the whole body to include headers/footers
+            const element = document.body; 
             const opt = {
-                margin:       [0.5, 0.3],
+                margin:       [10, 5, 10, 5], // Top, Left, Bottom, Right in mm
                 filename:     `تقرير_أمواج_الصياد_${sectionId}_${new Date().toLocaleDateString('ar-SA')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true,
                     letterRendering: true,
+                    windowWidth: 1200, // Force a desktop-like width for better table layout
                     scrollY: 0
                 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             // Run html2pdf
