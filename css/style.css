@@ -855,7 +855,17 @@ body.is-pdf-generating {
     width: 800px !important;
     margin: 0 !important;
     padding: 0 !important;
-    display: block !important; /* Ensure vertical stack */
+    display: block !important;
+}
+
+/* تعطيل الأنميشن تماماً لضمان ظهور البيانات */
+body.is-pdf-generating *, 
+body.is-pdf-generating *::before, 
+body.is-pdf-generating *::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 body.is-pdf-generating .sidebar,
@@ -868,7 +878,7 @@ body.is-pdf-generating .health-bar-container {
 }
 
 body.is-pdf-generating .print-only-header {
-    display: block !important; /* Block instead of flex for stacking */
+    display: block !important;
     width: 100% !important;
     text-align: center !important;
     padding: 20px 0 !important;
@@ -881,12 +891,6 @@ body.is-pdf-generating .print-only-header img {
     height: auto !important;
     margin: 0 auto 10px !important;
     display: block !important;
-}
-
-body.is-pdf-generating .print-only-header h1 {
-    color: black !important;
-    font-size: 24pt !important;
-    margin: 10px 0 !important;
 }
 
 body.is-pdf-generating .main-content {
@@ -905,23 +909,23 @@ body.is-pdf-generating .grid {
 
 body.is-pdf-generating .card {
     background: #fdfdfd !important;
-    border: 2px solid #000 !important; /* Thicker border for clarity */
+    border: 2px solid #000 !important;
     color: black !important;
     padding: 20px !important;
 }
 
-/* Force all text inside cards to be BLACK and BOLD */
 body.is-pdf-generating .card *,
 body.is-pdf-generating .stats,
-body.is-pdf-generating .card span,
-body.is-pdf-generating .card div {
+body.is-pdf-generating .card span {
     color: black !important;
     font-weight: bold !important;
-    background: none !important;
 }
 
-body.is-pdf-generating .stats {
-    font-size: 20pt !important;
+body.is-pdf-generating .badge {
+    color: black !important;
+    border: 1px solid black !important;
+    background: #eee !important; /* لون خلفية خفيف للأوسمة لتمييزها */
+    box-shadow: none !important;
 }
 
 body.is-pdf-generating table {
@@ -933,7 +937,6 @@ body.is-pdf-generating table {
 body.is-pdf-generating th {
     background: #e2e2e2 !important;
     color: black !important;
-    font-weight: bold !important;
     border: 1px solid black !important;
 }
 
@@ -941,15 +944,6 @@ body.is-pdf-generating td {
     color: black !important;
     border: 1px solid black !important;
     background: white !important;
-    font-weight: 500 !important;
-}
-
-body.is-pdf-generating .print-footer {
-    display: block !important;
-    text-align: center !important;
-    padding: 20px !important;
-    border-top: 2px solid black !important;
-    color: black !important;
 }
 
 
